@@ -47,6 +47,7 @@ createPsoCommandGraph(vsg::ref_ptr<vsg::Window> window, vsg::ref_ptr<vsg::Camera
                       vsg::ref_ptr<vsg::Node> scenegraph)
 {
     auto view = taal::pso::View::create(camera, scenegraph);
+    view->addChild(vsg::createHeadlight());
     auto renderGraph = taal::pso::RenderGraph::create(window, view);
     auto commandGraph = vsg::CommandGraph::create(window);
     commandGraph->addChild(renderGraph);
