@@ -16,6 +16,20 @@
 class ReplacePipelineVisitor : public vsg::Visitor
 {
 public:
+    void apply(vsg::Object& object) override
+    {
+        object.traverse(*this);
+    }
+
+    void apply(vsg::StateGroup& stateGroup) override
+    {
+        for (auto cmd : stateGroup.stateCommands)
+        {
+            cmd->accept(*this);
+        }
+        stateGroup.traverse(*this);
+    }
+
     void apply(vsg::BindGraphicsPipeline& bindPipeline) override
     {
         auto graphicsPipeline = bindPipeline.pipeline;
