@@ -3,8 +3,10 @@
 #include "RenderGraph.h"
 
 #include "psodefs.h"
+#include "SetScissorState.h"
 #include "SetViewportState.h"
 
+#include <vsg/state/ViewportState.h>
 #include <vsg/vk/ResourceRequirements.h>
 #include <vsg/vk/State.h>
 
@@ -24,7 +26,7 @@ void RenderGraph::accept(vsg::ConstVisitor& visitor) const
         resourceCollector->requirements.maxSlot = std::max(resourceCollector->requirements.maxSlot,
                                                            scissorSlot);
     }
-    Inherit::accept(visitor);
+    vsg::RenderGraph::accept(visitor);
 }
 
 void RenderGraph::accept(vsg::RecordTraversal& recordTraversal) const
@@ -38,9 +40,12 @@ void RenderGraph::accept(vsg::RecordTraversal& recordTraversal) const
                                         static_cast<float>(renderArea.extent.height),
                                         0.0f, 1.0f};
     auto viewportCmd = SetViewportState::create(0, vsg::Viewports{viewport});
+    auto scissorsCmd = SetScissorState::create(0, vsg::Scissors{renderArea});
     state->stateStacks[viewportCmd->slot].push(viewportCmd);
+    state->stateStacks[scissorsCmd->slot].push(scissorsCmd);
     state->dirty = true;
-    Inherit::accept(recordTraversal);
+    vsg::RenderGraph::accept(recordTraversal);
     state->stateStacks[viewportCmd->slot].pop();
+    state->stateStacks[scissorsCmd->slot].pop();
     state->dirty = true;
 }

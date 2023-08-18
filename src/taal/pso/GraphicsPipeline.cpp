@@ -19,7 +19,7 @@ namespace
     {
         pipeline.pipelineStates.push_back(createDynamicState());
         // Add a viewport state. This will be overriden by the dynamic state, but it will keep the
-        // pipeline from being recompiled on window resize. Also, the number of viewports and
+        // pipeline from being recompiled on window resize. The number of viewports and
         // scissors is set by this too.
         pipeline.pipelineStates.push_back(vsg::ViewportState::create(0, 0, 0, 0));
     }
