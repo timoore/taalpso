@@ -19,6 +19,11 @@ namespace taal
             vsg::Scissors scissors;
 
             void record(vsg::CommandBuffer& commandBuffer) const override;
+
+            int compare(const vsg::Object& rhs) const override;
+
+            void read(vsg::Input& input) override;
+            void write(vsg::Output& output) const override;
         };
     }
 }
